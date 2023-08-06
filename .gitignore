@@ -142,6 +142,3 @@ cython_debug/
 
 # Log file
 discord.log
-
-# Bot Config
-config.json
