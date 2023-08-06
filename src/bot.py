@@ -9,18 +9,17 @@ import sys
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import Bot, Context
-
 import exceptions
 
-if not os.path.isfile(f"{os.path.realpath(os.path.dirname(__file__))}/config.json"):
+if not os.path.isfile(f"{os.path.realpath(os.path.dirname(__file__))}/../config.json"):
     sys.exit("'config.json' not found! Please add it and try again.")
 else:
-    with open(f"{os.path.realpath(os.path.dirname(__file__))}/config.json") as file:
+    with open(f"{os.path.realpath(os.path.dirname(__file__))}/../config.json") as file:
         config = json.load(file)
 
 
 intents = discord.Intents.default()
-
+intents.message_content = True
 
 bot = Bot(
     command_prefix=commands.when_mentioned_or(config["prefix"]),
@@ -123,6 +122,7 @@ async def on_message(message: discord.Message) -> None:
 
     :param message: The message that was sent.
     """
+    
     if message.author == bot.user or message.author.bot:
         return
     await bot.process_commands(message)
@@ -165,23 +165,6 @@ async def on_command_error(context: Context, error) -> None:
             color=0xE02B2B,
         )
         await context.send(embed=embed)
-    elif isinstance(error, exceptions.UserBlacklisted):
-        """
-        The code here will only execute if the error is an instance of 'UserBlacklisted', which can occur when using
-        the @checks.not_blacklisted() check in your command, or you can raise the error by yourself.
-        """
-        embed = discord.Embed(
-            description="You are blacklisted from using the bot!", color=0xE02B2B
-        )
-        await context.send(embed=embed)
-        if context.guild:
-            bot.logger.warning(
-                f"{context.author} (ID: {context.author.id}) tried to execute a command in the guild {context.guild.name} (ID: {context.guild.id}), but the user is blacklisted from using the bot."
-            )
-        else:
-            bot.logger.warning(
-                f"{context.author} (ID: {context.author.id}) tried to execute a command in the bot's DMs, but the user is blacklisted from using the bot."
-            )
     elif isinstance(error, exceptions.UserNotOwner):
         """
         Same as above, just for the @checks.is_owner() check.
@@ -241,6 +224,6 @@ async def load_cogs() -> None:
                 bot.logger.error(f"Failed to load extension {extension}\n{exception}")
 
 
-asyncio.run(init_db())
-asyncio.run(load_cogs())
-bot.run(config["token"])
+if __name__ == "__main__":
+    asyncio.run(load_cogs())
+    bot.run(config["token"])
