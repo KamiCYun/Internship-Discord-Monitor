@@ -1,7 +1,6 @@
 import platform
 
 import discord
-from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -13,7 +12,6 @@ class General(commands.Cog, name="general"):
     @commands.hybrid_command(
         name="help", description="List all commands the bot has loaded."
     )
-    @app_commands.guilds(discord.Object(id=1106017357643644948)) 
     async def help(self, context: Context) -> None:
         prefix = self.bot.config["prefix"]
         embed = discord.Embed(
@@ -36,7 +34,6 @@ class General(commands.Cog, name="general"):
         name="botinfo",
         description="Get some useful (or not) information about the bot.",
     )
-    @app_commands.guilds(discord.Object(id=1106017357643644948)) 
     async def botinfo(self, context: Context) -> None:
         """
         Get some useful (or not) information about the bot.
@@ -64,7 +61,6 @@ class General(commands.Cog, name="general"):
         name="ping",
         description="Check if the bot is alive.",
     )
-    @app_commands.guilds(discord.Object(id=1106017357643644948)) 
     async def ping(self, context: Context) -> None:
         """
         Check if the bot is alive.
@@ -82,7 +78,6 @@ class General(commands.Cog, name="general"):
         name="invite",
         description="Get the invite link of the bot to be able to invite it.",
     )
-    @app_commands.guilds(discord.Object(id=1106017357643644948)) 
     async def invite(self, context: Context) -> None:
         """
         Get the invite link of the bot to be able to invite it.
@@ -104,7 +99,6 @@ class General(commands.Cog, name="general"):
         name="github",
         description="Get the link to the github repository of the bot.",
     )
-    @app_commands.guilds(discord.Object(id=1106017357643644948)) 
     async def server(self, context: Context) -> None:
         """
         Get the link to the github repository of the bot.

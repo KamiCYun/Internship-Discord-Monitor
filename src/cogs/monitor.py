@@ -1,5 +1,4 @@
 import discord
-from discord import app_commands
 from discord.ext import commands, tasks
 from discord.ext.commands import Context
 import re
@@ -18,7 +17,6 @@ class Monitor(commands.Cog, name="monitor"):
     @commands.hybrid_command(
         name="subscribe", description="Starts sending monitor updates to the channel the command is sent in."
     )
-    @app_commands.guilds(discord.Object(id=1106017357643644948)) 
     async def subscribe(self, context: Context) -> None:
         """
         Starts sending monitor updates to the channel the command is sent in.
@@ -43,7 +41,6 @@ class Monitor(commands.Cog, name="monitor"):
     @commands.hybrid_command(
         name="unsubscribe", description="Stops sending monitor updates to the channel the command is sent in."
     )
-    @app_commands.guilds(discord.Object(id=1106017357643644948)) 
     async def unsubscribe(self, context: Context) -> None:
         """
         Stops sending monitor updates to the channel the command is sent in.
@@ -68,7 +65,6 @@ class Monitor(commands.Cog, name="monitor"):
         name="start", description="Starts monitoring the github repository for new internships"
     )
     @checks.is_owner()
-    @app_commands.guilds(discord.Object(id=1106017357643644948)) 
     async def start(self, context: Context) -> None:
         """
         Starts monitoring the github repository for new internships
@@ -90,7 +86,6 @@ class Monitor(commands.Cog, name="monitor"):
         name="stop", description="Stops monitoring the github repository for new internships"
     )
     @checks.is_owner()
-    @app_commands.guilds(discord.Object(id=1106017357643644948)) 
     async def stop(self, context: Context) -> None:
         """
         Stops monitoring the github repository for new internships
