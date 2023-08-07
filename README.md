@@ -1,7 +1,10 @@
 # Internship Discord Monitor
- A discord monitor that sends new application postings from [Pitt CSC Internships Repo](https://github.com/SimplifyJobs/Summer2024-Internships/tree/dev) in realtime. Discord bot boilerplate code found [here](https://github.com/kkrypt0nn/Python-Discord-Bot-Template/tree/main). Show some love and **star** this repository!
+A discord monitor that sends new application postings from [Pitt CSC Internships Repo](https://github.com/SimplifyJobs/Summer2024-Internships/tree/dev) in realtime. Discord bot boilerplate code found [here](https://github.com/kkrypt0nn/Python-Discord-Bot-Template/tree/main). Show some love and **star** this repository!
 
- ## How it works
+I'm a broke college student so any donations appreciated:
+Venmo: @CYun3
+
+## How it works
 The ```?subscribe``` and ```?unsubscribe``` commands are used to add/remove a channel to the monitor's output list.
 
 The ```?start``` and ```?stop``` commands are used to start/stop the periodic monitoring of the internship repository.
