@@ -8,7 +8,7 @@ from hashlib import sha256
 import random
 from helpers import checks
 
-class Monitor(commands.Cog, name="Monitor"):
+class Monitor(commands.Cog, name="monitor"):
     def __init__(self, bot):
         self.bot = bot
         self.jobs = set()
