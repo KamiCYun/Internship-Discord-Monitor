@@ -112,7 +112,7 @@ class Monitor(commands.Cog, name="monitor"):
         )
         return output_string
 
-    @tasks.loop(seconds=10)
+    @tasks.loop(minutes=1)
     async def monitor_internships(self) -> None:
         headers = {
             'authority': 'raw.githubusercontent.com',
