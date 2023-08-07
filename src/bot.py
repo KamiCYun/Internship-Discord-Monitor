@@ -106,12 +106,12 @@ async def on_ready() -> None:
         await bot.tree.sync()
 
 
-@tasks.loop(minutes=1.0)
+@tasks.loop(minutes=10.0)
 async def status_task() -> None:
     """
     Setup the game status task of the bot.
     """
-    statuses = ["with you!", "with Krypton!", "with humans!"]
+    statuses = ["Peanuts!", "Noodles!", "Cats!"]
     await bot.change_presence(activity=discord.Game(random.choice(statuses)))
 
 
