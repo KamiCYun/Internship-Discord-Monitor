@@ -119,7 +119,6 @@ class Monitor(commands.Cog, name="Monitor"):
 
     @tasks.loop(seconds=10)
     async def monitor_internships(self) -> None:
-        print(self.jobs)
         headers = {
             'authority': 'raw.githubusercontent.com',
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -128,7 +127,7 @@ class Monitor(commands.Cog, name="Monitor"):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
         }
 
-        response = requests.get(f'https://raw.githubusercontent.com/{Monitor.bypass_cache("KamiCYun/Internship-Discord-Monitor")}/main/src/test.md', headers=headers)
+        response = requests.get(f'https://raw.githubusercontent.com/{Monitor.bypass_cache("SimplifyJobs/Summer2024-Internships")}/dev/README.md', headers=headers)
         jobs = re.findall("\|\s?\*{2}.+\*{2}\s?\|\s.+\s\|\n", response.text)
 
         for job in jobs:
