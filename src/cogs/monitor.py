@@ -5,6 +5,7 @@ from discord.ext.commands import Context
 import re
 import requests
 from hashlib import sha256
+import random
 from helpers import checks
 
 class Monitor(commands.Cog, name="Monitor"):
@@ -107,6 +108,15 @@ class Monitor(commands.Cog, name="Monitor"):
             embed.description = "Monitor is not activated"
             await context.send(embed=embed)
 
+    @staticmethod
+    def bypass_cache(input_string):
+        chars_to_capitalize = random.randint(1, len(input_string))
+        indexes = random.sample(range(len(input_string)), chars_to_capitalize)
+        output_string = ''.join(
+            char.upper() if index in indexes else char for index, char in enumerate(input_string)
+        )
+        return output_string
+
     @tasks.loop(seconds=10)
     async def monitor_internships(self) -> None:
         print(self.jobs)
@@ -118,7 +128,7 @@ class Monitor(commands.Cog, name="Monitor"):
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
         }
 
-        response = requests.get('https://raw.githubusercontent.com/KamiCYun/Internship-Discord-Monitor/main/src/test.md', headers=headers)
+        response = requests.get(f'https://raw.githubusercontent.com/{Monitor.bypass_cache("KamiCYun/Internship-Discord-Monitor")}/main/src/test.md', headers=headers)
         jobs = re.findall("\|\s?\*{2}.+\*{2}\s?\|\s.+\s\|\n", response.text)
 
         for job in jobs:
