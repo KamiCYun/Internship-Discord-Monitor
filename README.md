@@ -1,5 +1,5 @@
-# Internship Discord Monitor
-A discord monitor that sends new application postings from [Pitt CSC Internships Repo](https://github.com/SimplifyJobs/Summer2024-Internships/tree/dev) in realtime. Discord bot boilerplate code found [here](https://github.com/kkrypt0nn/Python-Discord-Bot-Template/tree/main). Show some love and **star** this repository!
+# Internship Discord Monitor CURRENTLY BEING REWRITTEN TO SUPPORT MORE JOBS BOARDS
+A discord monitor that sends new application postings from [Pitt CSC Internships Repo](https://github.com/SimplifyJobs/Summer2024-Internships/tree/dev) and most major job boards in realtime.
 
 I'm a broke college student so any donations appreciated:<br />
 Venmo: @CYun3
