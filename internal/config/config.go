@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/joho/godotenv"
 )
@@ -11,7 +12,8 @@ type Config struct {
 	DiscordToken    string
 	PostgreSQLToken string
 	Delay           uint32
-	Keywords        string
+	Keywords        []string
+	LinkedinWH      string
 }
 
 func Load() *Config {
@@ -24,10 +26,13 @@ func Load() *Config {
 		panic("Invalid DELAY .env value: " + err.Error())
 	}
 
+	envKeywords := os.Getenv("KEYWORDS")
+	keywords := strings.Split(envKeywords, ",")
+
 	return &Config{
-		DiscordToken:    os.Getenv("DISCORD_TOKEN"),
 		PostgreSQLToken: os.Getenv("POSTGRESQL_TOKEN"),
 		Delay:           uint32(delay32),
-		Keywords:        os.Getenv("KEYWORDS"),
+		Keywords:        keywords,
+		LinkedinWH:      os.Getenv("LINKEDINWH"),
 	}
 }
