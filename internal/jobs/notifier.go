@@ -95,7 +95,7 @@ func sendWebhook(url string, embeds []Embed, ping bool) error {
 		Embeds:   embeds,
 	}
 	if ping {
-		payload.Content = "@everyone"
+		payload.Content = "<@&1385352630447902771>"
 	}
 
 	body, err := json.Marshal(payload)

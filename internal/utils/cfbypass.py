@@ -1,7 +1,6 @@
 import cloudscraper
 import sys
 import json
-import requests
 
 def main():
     if len(sys.argv) < 3:

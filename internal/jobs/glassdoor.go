@@ -45,7 +45,6 @@ func MonitorGlassdoor(delay uint32, keywords string) ([]Job, error) {
 				Link:     job.Jobview.Header.SeoJobLink,
 				Time:     "24 Hrs Ago",
 			})
-			fmt.Println(job.Jobview.Header.SeoJobLink)
 		}
 
 		if len(listings) != 30 {
@@ -132,6 +131,10 @@ func generatePayload(keywords string, pageNumber int, pageCursor string) string 
 				{
 					"filterKey": "sortBy",
 					"values": "date_desc"
+				},
+				{
+					"filterKey": "industryNId",
+					"values": "10013"
 				}
 			],
 			"keyword": "%v",
