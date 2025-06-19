@@ -18,32 +18,67 @@ func main() {
 	log.Println("Loading config...")
 	cfg := config.Load()
 
-	ticker := time.NewTicker(1 * time.Hour)
-	defer ticker.Stop()
+	// Immediately run once on startup
+	go runLinkedInCycle(cfg)
+	go runGlassdoorCycle(cfg)
+
+	// Tickers
+	linkedinTicker := time.NewTicker(1 * time.Hour)
+	glassdoorTicker := time.NewTicker(24 * time.Hour)
+	defer linkedinTicker.Stop()
+	defer glassdoorTicker.Stop()
 
 	for {
-		log.Println("Starting LinkedIn scraping cycle...")
-		var allJobs []jobs.Job
-		seen := make(map[string]struct{})
-
-		for _, keyword := range cfg.Keywords {
-			log.Printf("Scraping keyword: %s", keyword)
-			newJobs, err := jobs.MonitorLinkedin(cfg.Delay, keyword)
-			if err != nil {
-				log.Printf("Error scraping LinkedIn for keyword '%s': %v", keyword, err)
-				continue
-			}
-			allJobs = appendUniqueJobs(allJobs, newJobs, seen)
+		select {
+		case <-linkedinTicker.C:
+			go runLinkedInCycle(cfg)
+		case <-glassdoorTicker.C:
+			go runGlassdoorCycle(cfg)
 		}
+	}
+}
 
-		if err := jobs.SendDiscordEmbeds(cfg.LinkedinWH, allJobs); err != nil {
-			log.Printf("Error sending Discord webhook: %v", err)
-		} else {
-			log.Printf("Successfully sent %d Unqiue LinkedIn jobs", len(allJobs))
+func runLinkedInCycle(cfg *config.Config) {
+	log.Println("Starting LinkedIn scraping cycle...")
+	var allJobs []jobs.Job
+	seen := make(map[string]struct{})
+
+	for _, keyword := range cfg.Keywords {
+		log.Printf("Scraping LinkedIn for keyword: %s", keyword)
+		newJobs, err := jobs.MonitorLinkedin(cfg.Delay, keyword)
+		if err != nil {
+			log.Printf("Error scraping LinkedIn for keyword '%s': %v", keyword, err)
+			continue
 		}
+		allJobs = appendUniqueJobs(allJobs, newJobs, seen)
+	}
 
-		log.Println("Cycle complete. Sleeping for 1 hour.")
-		<-ticker.C
+	if err := jobs.SendDiscordEmbeds(cfg.LinkedinWH, allJobs); err != nil {
+		log.Printf("Error sending LinkedIn webhook: %v", err)
+	} else {
+		log.Printf("Successfully sent %d unique LinkedIn jobs", len(allJobs))
+	}
+}
+
+func runGlassdoorCycle(cfg *config.Config) {
+	log.Println("Starting Glassdoor scraping cycle...")
+	var allJobs []jobs.Job
+	seen := make(map[string]struct{})
+
+	for _, keyword := range cfg.Keywords {
+		log.Printf("Scraping Glassdoor for keyword: %s", keyword)
+		newJobs, err := jobs.MonitorGlassdoor(cfg.Delay, keyword)
+		if err != nil {
+			log.Printf("Error scraping Glassdoor for keyword '%s': %v", keyword, err)
+			continue
+		}
+		allJobs = appendUniqueJobs(allJobs, newJobs, seen)
+	}
+
+	if err := jobs.SendDiscordEmbeds(cfg.GlassdoorWH, allJobs); err != nil {
+		log.Printf("Error sending Glassdoor webhook: %v", err)
+	} else {
+		log.Printf("Successfully sent %d Glassdoor jobs", len(allJobs))
 	}
 }
 
@@ -75,7 +110,6 @@ func appendUniqueJobs(base []jobs.Job, toAdd []jobs.Job, seen map[string]struct{
 		cleanURL := parsedURL.String()
 
 		if _, exists := seen[cleanURL]; !exists {
-			job.Link = cleanURL // optionally sanitize original link too
 			base = append(base, job)
 			seen[cleanURL] = struct{}{}
 		}

@@ -51,7 +51,7 @@ func MonitorLinkedin(delay uint32, keywords string) ([]Job, error) {
 
 		// Parse jobs
 		prevCount := len(jobs)
-		parseJobs(string(body), &jobs)
+		parseLinkedinJobs(string(body), &jobs)
 
 		// no more jobs
 		if len(jobs) == prevCount || len(jobs) >= 1000 {
@@ -66,7 +66,7 @@ func MonitorLinkedin(delay uint32, keywords string) ([]Job, error) {
 	return jobs, nil
 }
 
-func parseJobs(html string, jobs *[]Job) {
+func parseLinkedinJobs(html string, jobs *[]Job) {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 	if err != nil {
 		log.Printf("Linkedin parse error: %v", err)

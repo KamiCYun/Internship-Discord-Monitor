@@ -14,6 +14,7 @@ type Config struct {
 	Delay           uint32
 	Keywords        []string
 	LinkedinWH      string
+	GlassdoorWH     string
 }
 
 func Load() *Config {
@@ -34,5 +35,6 @@ func Load() *Config {
 		Delay:           uint32(delay32),
 		Keywords:        keywords,
 		LinkedinWH:      os.Getenv("LINKEDINWH"),
+		GlassdoorWH:     os.Getenv("GLASSDOORWH"),
 	}
 }

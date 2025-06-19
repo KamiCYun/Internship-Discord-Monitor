@@ -15,6 +15,11 @@ type EmbedField struct {
 	Inline bool   `json:"inline"`
 }
 
+type EmbedFooter struct {
+	Text    string `json:"text,omitempty"`
+	IconURL string `json:"icon_url,omitempty"` // Optional
+}
+
 type Embed struct {
 	Title       string       `json:"title"`
 	Description string       `json:"description,omitempty"`
@@ -22,6 +27,7 @@ type Embed struct {
 	Color       int          `json:"color,omitempty"`
 	Fields      []EmbedField `json:"fields,omitempty"`
 	Timestamp   string       `json:"timestamp,omitempty"`
+	Footer      *EmbedFooter `json:"footer,omitempty"` // ← ADD THIS
 }
 
 type WebhookPayload struct {
@@ -53,8 +59,13 @@ func SendDiscordEmbeds(webhookURL string, jobs []Job) error {
 				{Name: "Posted", Value: job.Time, Inline: true},
 			},
 			Timestamp: time.Now().UTC().Format(time.RFC3339),
+			Footer: &EmbedFooter{
+				Text: "CYUN v0.2",
+			},
 		}
-		batch = append(batch, embed)
+		if !isBlacklisted(job.Company) {
+			batch = append(batch, embed)
+		}
 
 		// Trigger ping if prestigious company found
 		if !shouldPing && isPrestigious(job.Company) {
@@ -107,5 +118,10 @@ func sendWebhook(url string, embeds []Embed, ping bool) error {
 
 func isPrestigious(company string) bool {
 	_, ok := TopTechCompanies[strings.ToLower(company)]
+	return ok
+}
+
+func isBlacklisted(company string) bool {
+	_, ok := Blacklist[strings.ToLower(company)]
 	return ok
 }
