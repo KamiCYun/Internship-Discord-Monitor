@@ -21,10 +21,10 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy rest of the source
+# Copy the rest of the source
 COPY . .
 
-# Build a static binary (no glibc dependency)
+# Build a static Go binary
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main ./cmd/main.go
 
 
@@ -33,13 +33,16 @@ FROM debian:bullseye-slim
 
 WORKDIR /app
 
+# Install CA certs and add python symlink for subprocess compatibility
+RUN apt-get update && \
+    apt-get install -y ca-certificates && \
+    ln -s /app/venv/bin/python /usr/local/bin/python && \
+    rm -rf /var/lib/apt/lists/*
+
 # Copy built Go binary and Python venv
 COPY --from=go-build /app/main /app/main
 COPY --from=python-deps /app/venv /app/venv
 COPY --from=go-build /app/internal /app/internal
-
-# # Set environment for Python if needed (optional)
-# ENV PATH="/app/venv/bin:$PATH"
 
 # Run the Go application
 CMD ["./main"]
