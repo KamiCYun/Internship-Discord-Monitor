@@ -13,10 +13,15 @@ import (
 )
 
 func main() {
+	log.Println("==> Starting internship-discord-monitor...")
+
 	go serveHealthCheck()
 
 	log.Println("Loading config...")
 	cfg := config.Load()
+	if cfg == nil {
+		log.Fatal("Failed to load config")
+	}
 
 	// Immediately run once on startup
 	go runLinkedInCycle(cfg)
