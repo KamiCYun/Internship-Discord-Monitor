@@ -33,16 +33,18 @@ FROM debian:bullseye-slim
 
 WORKDIR /app
 
-# Install CA certs and add python symlink for subprocess compatibility
+# Install required packages including python3 and CA certs
 RUN apt-get update && \
-    apt-get install -y ca-certificates && \
-    ln -s /app/venv/bin/python /usr/local/bin/python && \
+    apt-get install -y python3 python3-venv ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy built Go binary and Python venv
 COPY --from=go-build /app/main /app/main
 COPY --from=python-deps /app/venv /app/venv
 COPY --from=go-build /app/internal /app/internal
+
+# Optional: activate venv path if needed
+ENV PATH="/app/venv/bin:$PATH"
 
 # Run the Go application
 CMD ["./main"]
