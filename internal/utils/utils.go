@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 )
 
@@ -23,6 +24,7 @@ func CloudflareRequest(method, url, headersJSON, payloadJSON string) (*Cloudflar
 	}
 
 	cmd := exec.Command("python", args...)
+	cmd.Env = os.Environ()
 	out, err := cmd.Output()
 	if err != nil {
 		return nil, fmt.Errorf("python error: %v", err)
